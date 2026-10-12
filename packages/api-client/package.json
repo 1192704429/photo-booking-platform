@@ -1,0 +1,14 @@
+{
+  "name": "@aicp/api-client",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./common": "./src/common.ts",
+    "./admin": "./src/admin.ts",
+    "./browser-endpoint": "./src/browser-endpoint.ts",
+    "./template-auth": "./src/template-auth.ts"
+  },
+  "dependencies": {
+    "@aicp/contracts": "workspace:*"
+  }
+}

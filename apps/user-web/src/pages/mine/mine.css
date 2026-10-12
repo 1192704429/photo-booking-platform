@@ -1,0 +1,65 @@
+.mine-page {
+  padding: 20px var(--page-pad-x) 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mine-hero {
+  border: 1px solid var(--color-line) !important;
+  background: #fff !important;
+  color: var(--color-ink) !important;
+  box-shadow: none !important;
+}
+
+.mine-hero .ant-typography {
+  color: var(--color-ink);
+}
+
+.mine-brand {
+  display: block;
+  margin-bottom: 14px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em;
+  color: var(--color-primary) !important;
+  opacity: 1;
+}
+
+.mine-user {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.mine-user-meta .ant-typography {
+  margin: 0 !important;
+}
+
+.mine-menu-card {
+  border: 1px solid var(--color-line) !important;
+  box-shadow: none !important;
+}
+
+.mine-menu-link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mine-menu-icon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 18px;
+}

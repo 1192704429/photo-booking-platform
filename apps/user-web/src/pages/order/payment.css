@@ -1,0 +1,230 @@
+.od-hero-pending_pay {
+  color: #8a5a12;
+  background: var(--color-accent-soft);
+}
+
+.od-payment-card {
+  border: 1px solid color-mix(in srgb, var(--color-primary) 18%, var(--color-line));
+}
+
+.od-payment-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.od-payment-head h2 {
+  margin-top: 4px;
+  font-size: 20px;
+}
+
+.od-payment-head p {
+  margin: 5px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.od-payment-head > strong {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.od-payment-eyebrow {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.od-payment-methods {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.od-payment-method {
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: #fbfcfc;
+  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.od-payment-method:hover,
+.od-payment-method:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  outline: none;
+}
+
+.od-payment-method:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.od-payment-method:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.od-payment-method > span:nth-child(2) {
+  min-width: 0;
+}
+
+.od-payment-method strong,
+.od-payment-method small {
+  display: block;
+}
+
+.od-payment-method strong {
+  font-size: 15px;
+}
+
+.od-payment-method small {
+  margin-top: 3px;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.od-payment-brand {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.od-payment-method.wechat .od-payment-brand {
+  background: #07c160;
+}
+
+.od-payment-method.alipay .od-payment-brand {
+  background: #1677ff;
+}
+
+.od-payment-method.wechat,
+.od-payment-method.alipay { position: relative; }
+.od-payment-method.wechat::before,
+.od-payment-method.alipay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  border-radius: 8px 0 0 8px;
+}
+.od-payment-method.wechat::before { background: #07c160; }
+.od-payment-method.alipay::before { background: #1677ff; }
+
+.od-payment-arrow {
+  color: var(--color-muted);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.od-wechat-qr {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--color-primary-soft);
+}
+
+.od-qr-frame {
+  padding: 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.od-qr-copy {
+  text-align: center;
+}
+
+.od-qr-copy h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.od-qr-copy p {
+  max-width: 360px;
+  margin: 7px auto 12px;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.od-qr-copy button {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.od-payment-feedback,
+.od-payment-success {
+  margin: 12px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.od-payment-success {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #e0f1e8;
+  color: #176b46;
+}
+
+@media (min-width: 960px) {
+  .od-payment-methods {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .od-wechat-qr {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    padding: 28px;
+  }
+
+  .od-qr-copy {
+    text-align: left;
+  }
+
+  .od-qr-copy p {
+    margin-inline: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .od-payment-method {
+    transition: none;
+  }
+}

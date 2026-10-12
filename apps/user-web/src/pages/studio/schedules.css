@@ -1,0 +1,301 @@
+.schedules-page {
+  padding: 16px var(--page-pad-x) 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100vh;
+}
+
+.schedules-back {
+  width: fit-content;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.schedules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.schedules-brand {
+  margin: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.schedules-header h1 {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+}
+
+.schedules-sub {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.schedules-state {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.schedules-state.error {
+  color: #b42318;
+}
+
+.schedules-state.ok {
+  color: var(--color-primary);
+}
+
+.schedules-calendar,
+.schedules-day {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  padding: 14px;
+}
+
+.calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.calendar-head h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.calendar-head button {
+  border: 1px solid var(--color-line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.calendar-legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.calendar-legend .leg {
+  font-size: 11px;
+  color: var(--color-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-legend .leg::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.calendar-legend .leg.available::before {
+  background: var(--color-primary-soft);
+  border: 1px solid #bfd4d7;
+}
+
+.calendar-legend .leg.booked::before {
+  background: #f3e8d8;
+  border: 1px solid #d9b896;
+}
+
+.calendar-legend .leg.closed::before {
+  background: #eceff1;
+  border: 1px solid #cfd6da;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #f4f7f8;
+  color: #9aa7b0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calendar-cell.empty {
+  background: transparent;
+  border: 0;
+}
+
+.calendar-cell.has-slot {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-color: #bfd4d7;
+}
+
+.calendar-cell.booked {
+  background: #f3e8d8;
+  color: #8a5a2b;
+  border-color: #d9b896;
+}
+
+.calendar-cell.closed {
+  background: #eceff1;
+  color: #6b7780;
+  border-color: #cfd6da;
+}
+
+.calendar-cell.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.schedules-day h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slot-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+}
+
+.slot-item em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.slot-item.available {
+  border-color: #9fc0c5;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.slot-item.unavailable {
+  background: #f3f5f6;
+  color: #6b7780;
+}
+
+.slot-item.off {
+  color: var(--color-muted);
+}
+
+.slot-item.locked {
+  background: #f8efe4;
+  border-color: #d9b896;
+  color: #8a5a2b;
+  cursor: not-allowed;
+}
+
+.schedules-hint {
+  margin: 12px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.custom-slot {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.custom-slot label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.custom-slot input {
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.ghost-btn,
+.primary-btn,
+.danger-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 14px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.ghost-btn {
+  background: #eef3f4;
+  color: var(--color-ink);
+}
+
+.schedules-actions {
+  margin-top: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.primary-btn {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.danger-btn {
+  background: #f4e9e7;
+  color: #9a3412;
+}
+
+.primary-btn:disabled,
+.danger-btn:disabled,
+.ghost-btn:disabled,
+.slot-item:disabled {
+  opacity: 0.65;
+}

@@ -1,0 +1,14 @@
+.complaint-page { max-width: 880px; margin: 0 auto; padding: 28px var(--page-pad-x) 56px; }
+.complaint-back { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: var(--color-muted); }
+.complaint-card { border: 1px solid var(--color-line); box-shadow: 0 14px 34px rgba(23, 48, 58, .06); }
+.complaint-heading { margin-bottom: 22px; }
+.complaint-heading > span { color: var(--color-primary); font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+.complaint-heading h1 { margin: 8px 0; color: var(--color-ink); font-size: 30px; }
+.complaint-heading p { margin: 0; color: var(--color-muted); }
+.complaint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 24px; }
+.complaint-full-width { width: 100%; }
+.complaint-actions { display: flex; justify-content: flex-end; width: 100%; margin-top: 8px; }
+.complaint-actions .ant-btn { min-width: 96px; }
+.complaint-page .ant-upload-wrapper .ant-upload-select { border-radius: 8px; }
+.complaint-page .ant-upload-wrapper .ant-upload-list-item-container { border-radius: 8px; }
+@media (max-width: 640px) { .complaint-grid { grid-template-columns: 1fr; gap: 0; } .complaint-heading h1 { font-size: 26px; } }

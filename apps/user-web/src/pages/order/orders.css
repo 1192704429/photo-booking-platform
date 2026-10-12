@@ -1,0 +1,92 @@
+.orders-page {
+  padding: 20px var(--page-pad-x) 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.orders-brand {
+  display: block;
+  margin-bottom: 4px !important;
+  color: var(--color-primary) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 12px !important;
+}
+
+.orders-header .ant-typography {
+  margin-bottom: 0 !important;
+}
+
+.orders-header .ant-typography-secondary {
+  margin-top: 4px !important;
+}
+
+.orders-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.orders-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.orders-tabs .ant-tag {
+  flex-shrink: 0;
+  margin-inline-end: 0 !important;
+  padding: 6px 12px;
+  border-radius: 999px !important;
+  line-height: 1.4;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.orders-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.orders-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.orders-card-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.orders-meta {
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-line);
+}
+
+.orders-meta > div {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 8px;
+  font-size: 13px;
+}
+
+@media (min-width: 720px) {
+  .orders-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}

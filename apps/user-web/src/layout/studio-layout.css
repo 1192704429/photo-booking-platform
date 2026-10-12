@@ -1,0 +1,340 @@
+.studio-route-shell {
+  min-height: 100vh;
+  background: #f4f6f7;
+}
+
+.studio-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  min-height: 66px;
+  padding: 0 max(20px, calc((100vw - 1200px) / 2 + 32px));
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid var(--color-line);
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 1px 0 rgb(24 47 52 / 3%);
+  backdrop-filter: blur(16px);
+}
+
+.studio-brand {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.studio-brand strong { font-size: 17px; letter-spacing: -.02em; }
+.studio-brand span { color: var(--color-muted); font-size: 9px; font-weight: 700; letter-spacing: .12em; }
+
+.studio-nav {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.studio-nav::-webkit-scrollbar { display: none; }
+
+.studio-nav a,
+.studio-exit {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color .16s ease;
+}
+
+.studio-nav a {
+  position: relative;
+  min-height: 66px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.studio-nav a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-primary);
+  opacity: 0;
+  transform: scaleX(.4);
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+.studio-nav a:hover,
+.studio-nav a.active { color: var(--color-primary); }
+.studio-nav a.active::after { opacity: 1; transform: scaleX(1); }
+
+.studio-exit {
+  padding: 8px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  background: var(--color-surface);
+}
+
+.studio-exit:hover { color: var(--color-primary); border-color: #a8bdc0; }
+
+/* Photographer workspace visual system. Page styles are intentionally scoped here
+   so every management screen follows the same compact desktop rhythm. */
+.studio-route-shell > .app-shell {
+  width: min(100%, 1264px);
+  min-height: calc(100vh - 66px);
+}
+
+.studio-route-shell :is(
+  .overview-page,
+  .works-page,
+  .packages-page,
+  .profile-page,
+  .schedules-page,
+  .shoot-calendar-page,
+  .studio-orders-page,
+  .studio-reviews-page
+) {
+  min-height: auto;
+  padding: 30px 32px 52px;
+  gap: 18px;
+}
+
+.studio-route-shell :is(.overview-brand, .works-brand, .pkg-brand, .profile-brand, .schedules-brand, .sc-brand, .so-brand, .sr-brand) {
+  margin: 0 0 5px;
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.studio-route-shell :is(.overview-header, .works-header, .pkg-header, .profile-header, .schedules-header, .sc-header, .so-header, .sr-header) {
+  min-height: 62px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.studio-route-shell :is(.overview-header, .works-header, .pkg-header, .profile-header, .schedules-header, .sc-header, .so-header, .sr-header) h1 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+
+.studio-route-shell :is(.overview-sub, .works-sub, .pkg-sub, .profile-sub, .schedules-sub, .sc-sub, .so-sub, .sr-sub) {
+  margin-top: 7px;
+  font-size: 13px;
+}
+
+.studio-route-shell :is(.works-back, .pkg-back, .profile-back, .schedules-back, .sc-back, .so-back, .sr-back) {
+  display: none;
+}
+
+.studio-route-shell :is(.works-upload-btn, .pkg-publish-btn, .overview-mine-link) {
+  margin-top: 1px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 15px;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.studio-route-shell :is(.works-filters, .pkg-filters, .so-filters, .sr-filters) {
+  padding: 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.studio-route-shell :is(
+  .works-filters input, .works-filters select,
+  .pkg-filters input,
+  .so-filters input, .so-filters select,
+  .sr-filters select,
+  .work-form input, .work-form select, .work-form textarea,
+  .pkg-form input, .pkg-form select, .pkg-form textarea,
+  .profile-form input, .profile-form textarea,
+  .custom-slot input, .so-field textarea
+) {
+  min-height: 38px;
+  border-radius: 6px;
+  padding: 8px 11px;
+  background: #fff;
+}
+
+.studio-route-shell :is(.works-filters, .so-filters, .sr-filters) .ant-select,
+.studio-route-shell :is(.works-filters, .so-filters, .sr-filters) .ant-select-selector {
+  width: 100%;
+}
+
+.studio-route-shell :is(.works-filters, .so-filters, .sr-filters) .ant-select-selector {
+  min-height: 38px;
+  border-radius: 6px !important;
+  padding: 3px 11px !important;
+}
+
+.studio-route-shell :is(.works-filters button, .pkg-filters button, .so-filters button, .sr-filters button, .ghost-btn, .primary-btn, .danger-btn) {
+  min-height: 38px;
+  border-radius: 6px;
+  padding: 8px 15px;
+}
+
+.studio-route-shell :is(
+  .stat-card, .chart-panel, .overview-actions,
+  .work-card, .work-detail, .work-form,
+  .pkg-card, .pkg-detail, .pkg-form,
+  .profile-stats article, .profile-form,
+  .schedules-calendar, .schedules-day,
+  .sc-calendar, .sc-day,
+  .so-table-wrap, .so-detail-card, .so-progress-form,
+  .sr-summary, .sr-card
+) {
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(28 47 51 / 4%);
+}
+
+.studio-route-shell .stat-card { padding: 18px; }
+.studio-route-shell .stat-card.accent { background: var(--color-primary); }
+.studio-route-shell .stat-value { font-size: 30px; }
+.studio-route-shell .overview-charts { gap: 16px; }
+.studio-route-shell .chart-panel { min-height: 310px; padding: 20px; }
+
+.studio-route-shell .works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.studio-route-shell .work-card {
+  display: block;
+  min-height: 0;
+  padding: 10px;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.studio-route-shell .work-card:hover,
+.studio-route-shell .pkg-card:hover {
+  border-color: #adc1c3;
+  box-shadow: 0 12px 28px rgb(28 47 51 / 7%);
+  transform: translateY(-2px);
+}
+
+.studio-route-shell .work-card img { width: 100%; height: 168px; border-radius: 7px; }
+.studio-route-shell .work-card-body { min-width: 0; padding: 12px 3px 4px; }
+.studio-route-shell .work-card-body h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.studio-route-shell .pkg-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.studio-route-shell .pkg-card { min-height: 190px; padding: 18px; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+
+.studio-route-shell .pkg-card { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 16px; padding: 10px; }
+.studio-route-shell .pkg-card-cover { overflow: hidden; min-height: 168px; border-radius: 7px; background: var(--color-primary-soft); display: flex; align-items: center; justify-content: center; }
+.studio-route-shell .pkg-card-cover img { width: 100%; height: 100%; min-height: 168px; object-fit: cover; }
+.studio-route-shell .pkg-card-cover span { color: var(--color-primary); font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+.studio-route-shell .pkg-card-content { min-width: 0; padding: 5px 4px; }
+.studio-route-shell .pkg-card-content .pkg-meta { margin-top: 12px; }
+.studio-route-shell .pkg-meta-location { grid-column: 1 / -1; }
+
+.studio-route-shell :is(.work-form, .pkg-form, .profile-form, .so-detail-card, .so-progress-form) { padding: 22px; }
+.studio-route-shell :is(.work-form > button[type="submit"], .pkg-form > button[type="submit"], .profile-form > button[type="submit"]) {
+  min-height: 40px;
+  border-radius: 6px;
+  padding: 9px 18px;
+}
+
+.studio-route-shell .profile-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.studio-route-shell .profile-avatar-block,
+.studio-route-shell .profile-style-grid,
+.studio-route-shell .profile-form > button[type="submit"] { grid-column: 1 / -1; }
+.studio-route-shell .profile-avatar { border-radius: 10px; }
+.studio-route-shell :is(.profile-upload, .style-chip) { border-radius: 6px; }
+
+.studio-route-shell :is(.schedules-calendar, .sc-calendar) { padding: 22px; }
+.studio-route-shell :is(.schedules-day, .sc-day) { padding: 20px; }
+.studio-route-shell :is(.calendar-cell, .sc-cell, .slot-item, .sc-item) { border-radius: 7px; }
+
+.studio-route-shell .so-table-wrap { overflow: hidden; }
+.studio-route-shell .so-table th { background: #f7f9f9; color: #53636b; }
+.studio-route-shell .so-table th,
+.studio-route-shell .so-table td { padding: 13px 15px; }
+.studio-route-shell :is(.so-btn, .so-status, .sc-status, .sr-anon) { border-radius: 5px; }
+
+.studio-route-shell .sr-summary { background: var(--color-primary); }
+.studio-route-shell .sr-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.studio-route-shell .sr-card { margin: 0; padding: 18px; }
+
+@media (min-width: 960px) {
+  .studio-route-shell .overview-charts { grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); }
+  .studio-route-shell :is(.schedules-page, .shoot-calendar-page) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
+    align-items: start;
+  }
+  .studio-route-shell :is(.schedules-header, .sc-header, .schedules-state, .sc-state, .schedules-back, .sc-back) { grid-column: 1 / -1; }
+}
+
+@media (max-width: 719px) {
+  .studio-header {
+    min-height: 56px;
+    gap: 14px;
+    padding: 8px 14px;
+    align-items: flex-start;
+  }
+
+  .studio-brand span { display: none; }
+  .studio-nav { gap: 16px; padding-top: 2px; }
+  .studio-exit { display: none; }
+
+  .studio-route-shell :is(
+    .overview-page, .works-page, .packages-page, .profile-page,
+    .schedules-page, .shoot-calendar-page, .studio-orders-page, .studio-reviews-page
+  ) { padding: 22px 16px 36px; }
+
+  .studio-route-shell .works-grid,
+  .studio-route-shell .pkg-list,
+  .studio-route-shell .sr-list,
+  .studio-route-shell .profile-form { grid-template-columns: 1fr; }
+  .studio-route-shell .profile-avatar-block,
+  .studio-route-shell .profile-style-grid,
+  .studio-route-shell .profile-form > button[type="submit"] { grid-column: auto; }
+  .studio-route-shell .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .studio-route-shell .work-card img { height: 128px; }
+  .studio-route-shell .pkg-card { grid-template-columns: 108px minmax(0, 1fr); }
+  .studio-route-shell .pkg-card-cover,
+  .studio-route-shell .pkg-card-cover img { min-height: 132px; }
+}
+
+@media (max-width: 480px) {
+  .studio-route-shell .works-grid { grid-template-columns: 1fr; }
+  .studio-route-shell .work-card img { height: 190px; }
+  .studio-route-shell .pkg-card { display: block; }
+  .studio-route-shell .pkg-card-cover { height: 170px; min-height: 0; }
+  .studio-route-shell .pkg-card-cover img { min-height: 0; }
+}

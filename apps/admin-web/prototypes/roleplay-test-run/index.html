@@ -1,0 +1,2269 @@
+<!-- PROTOTYPE ONLY: 三种交互式对练试运行面板布局，用于票据 140 的结构评审。 -->
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7fa" />
+    <title>对练试运行面板 · 原型</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --canvas: #f5f7fa;
+        --surface: #ffffff;
+        --surface-subtle: #f8fafc;
+        --surface-blue: #f1f6ff;
+        --ink: #172033;
+        --muted: #667085;
+        --tertiary: #98a2b3;
+        --line: #e3e8ef;
+        --line-strong: #cbd5e1;
+        --blue: #2563eb;
+        --blue-dark: #1d4ed8;
+        --blue-soft: #eff6ff;
+        --green: #087443;
+        --green-soft: #ecfdf3;
+        --amber: #a15c07;
+        --amber-soft: #fffaeb;
+        --red: #b42318;
+        --red-soft: #fef3f2;
+        --purple: #6941c6;
+        --purple-soft: #f4f3ff;
+        --radius-control: 5px;
+        --radius-surface: 7px;
+        --shadow-surface: 0 1px 2px rgb(16 24 40 / 4%);
+        --shadow-overlay: 0 16px 34px -18px rgb(16 24 40 / 32%);
+        --body-font: "Noto Sans SC Variable", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --data-font: "Manrope Variable", "Avenir Next", "Segoe UI", sans-serif;
+        --utility-font: "IBM Plex Mono", "SFMono-Regular", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: var(--body-font);
+        letter-spacing: 0;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        background: var(--canvas);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button,
+      select,
+      input,
+      textarea {
+        border-radius: var(--radius-control);
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid rgb(37 99 235 / 18%);
+        outline-offset: 2px;
+      }
+
+      .prototype-frame {
+        min-height: 100vh;
+        padding-bottom: 92px;
+      }
+
+      .app-header {
+        min-height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 0 max(18px, calc((100vw - 1440px) / 2));
+        border-bottom: 1px solid var(--line);
+        background: rgb(255 255 255 / 96%);
+      }
+
+      .brand-lockup,
+      .header-actions,
+      .breadcrumb,
+      .page-actions,
+      .canvas-toolbar,
+      .section-heading,
+      .meta-row,
+      .panel-heading,
+      .status-line,
+      .chat-footer,
+      .diagnostic-header,
+      .stage-rail__item,
+      .bench-heading,
+      .focus-header,
+      .focus-actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .brand-lockup {
+        gap: 9px;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .brand-mark {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 6px;
+        color: #fff;
+        background: var(--blue);
+        font-family: var(--data-font);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .header-actions,
+      .focus-actions {
+        gap: 8px;
+      }
+
+      .header-link,
+      .icon-button,
+      .text-button,
+      .primary-button,
+      .quiet-button,
+      .danger-button,
+      .send-button {
+        min-height: 32px;
+        border: 1px solid transparent;
+        color: var(--muted);
+        background: transparent;
+        font-size: 12px;
+      }
+
+      .header-link,
+      .text-button,
+      .quiet-button,
+      .danger-button,
+      .primary-button,
+      .send-button {
+        padding: 0 11px;
+      }
+
+      .header-link:hover,
+      .text-button:hover,
+      .quiet-button:hover {
+        color: var(--blue-dark);
+        background: var(--blue-soft);
+      }
+
+      .icon-button {
+        width: 32px;
+        padding: 0;
+        display: inline-grid;
+        place-items: center;
+        border-color: var(--line);
+        background: var(--surface);
+      }
+
+      .icon-button:hover {
+        border-color: var(--line-strong);
+        color: var(--blue-dark);
+      }
+
+      .primary-button,
+      .send-button {
+        border-color: var(--blue);
+        color: #fff;
+        background: var(--blue);
+        font-weight: 650;
+      }
+
+      .primary-button:hover,
+      .send-button:hover {
+        border-color: var(--blue-dark);
+        background: var(--blue-dark);
+      }
+
+      .primary-button:disabled,
+      .send-button:disabled,
+      .danger-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.46;
+      }
+
+      .quiet-button {
+        border-color: var(--line);
+        background: var(--surface);
+      }
+
+      .danger-button {
+        border-color: #f0c4c0;
+        color: var(--red);
+        background: var(--surface);
+      }
+
+      .danger-button:hover {
+        background: var(--red-soft);
+      }
+
+      .icon {
+        margin-right: 5px;
+        font-family: var(--utility-font);
+        font-size: 13px;
+        line-height: 1;
+      }
+
+      .editor-shell {
+        width: min(1440px, 100%);
+        min-height: calc(100vh - 58px);
+        margin: 0 auto;
+        padding: 16px 18px 28px;
+      }
+
+      .editor-topline {
+        min-height: 52px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+
+      .breadcrumb {
+        gap: 7px;
+        margin-bottom: 4px;
+        color: var(--tertiary);
+        font-size: 11px;
+      }
+
+      .breadcrumb strong {
+        color: var(--blue);
+        font-weight: 650;
+      }
+
+      .editor-title {
+        margin: 0;
+        color: var(--ink);
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .editor-subtitle {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .page-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 7px;
+      }
+
+      .snapshot-chip,
+      .status-chip,
+      .mini-chip,
+      .stage-badge,
+      .result-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 25px;
+        padding: 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        color: var(--muted);
+        background: var(--surface-subtle);
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .snapshot-chip {
+        color: var(--green);
+        border-color: #b7e4ca;
+        background: var(--green-soft);
+      }
+
+      .status-chip.is-active,
+      .stage-badge.is-active {
+        color: var(--blue-dark);
+        border-color: #b9d0ff;
+        background: var(--blue-soft);
+      }
+
+      .status-chip.is-ready {
+        color: var(--amber);
+        border-color: #f1d79d;
+        background: var(--amber-soft);
+      }
+
+      .status-chip.is-saving {
+        color: var(--blue-dark);
+        border-color: #b9d0ff;
+        background: var(--blue-soft);
+      }
+
+      .status-chip.is-done,
+      .result-badge {
+        color: var(--green);
+        border-color: #b7e4ca;
+        background: var(--green-soft);
+      }
+
+      .status-chip.is-error {
+        color: var(--red);
+        border-color: #f0b9b9;
+        background: var(--red-soft);
+      }
+
+      .editor-surface,
+      .focus-surface {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-surface);
+        background: var(--surface);
+        box-shadow: var(--shadow-surface);
+      }
+
+      .canvas-toolbar,
+      .bench-heading,
+      .focus-header {
+        min-height: 50px;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 15px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-heading {
+        gap: 9px;
+        min-width: 0;
+      }
+
+      .section-heading__mark {
+        width: 26px;
+        height: 26px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #b9d0ff;
+        border-radius: 5px;
+        color: var(--blue);
+        background: var(--blue-soft);
+        font-family: var(--utility-font);
+        font-size: 12px;
+      }
+
+      .section-heading strong,
+      .panel-heading strong,
+      .bench-heading strong,
+      .focus-header strong {
+        display: block;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .section-heading span,
+      .panel-heading span,
+      .bench-heading span,
+      .focus-header span {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .canvas-toolbar__actions,
+      .bench-heading__actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 0 0 auto;
+      }
+
+      .editor-workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 390px;
+        min-height: 680px;
+      }
+
+      .flow-area {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        background: #fbfcfe;
+      }
+
+      .flow-area__meta {
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .flow-area__meta strong {
+        color: var(--ink);
+        font-size: 11px;
+      }
+
+      .flow-canvas {
+        position: relative;
+        flex: 1;
+        min-height: 450px;
+        overflow: hidden;
+        padding: 38px 32px;
+        background-color: #fbfcfe;
+        background-image: radial-gradient(#d7dee9 0.7px, transparent 0.7px);
+        background-size: 18px 18px;
+      }
+
+      .flow-canvas__label {
+        position: absolute;
+        top: 17px;
+        left: 25px;
+        color: var(--tertiary);
+        font-family: var(--utility-font);
+        font-size: 10px;
+        letter-spacing: 0.04em;
+      }
+
+      .flow-graph {
+        width: min(760px, 100%);
+        height: 100%;
+        min-height: 340px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(128px, 1fr));
+        grid-template-rows: repeat(3, minmax(84px, 1fr));
+        align-items: center;
+        gap: 18px 42px;
+      }
+
+      .flow-node {
+        position: relative;
+        min-width: 0;
+        min-height: 86px;
+        padding: 12px;
+        border: 1px solid var(--line-strong);
+        border-radius: 6px;
+        background: var(--surface);
+        box-shadow: var(--shadow-surface);
+      }
+
+      .flow-node.is-active {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgb(37 99 235 / 11%);
+      }
+
+      .flow-node.is-done {
+        border-color: #a8d9bb;
+        background: #fbfffc;
+      }
+
+      .flow-node__eyebrow {
+        color: var(--tertiary);
+        font-family: var(--utility-font);
+        font-size: 9px;
+      }
+
+      .flow-node strong {
+        display: block;
+        margin: 5px 0 4px;
+        color: var(--ink);
+        font-size: 12px;
+      }
+
+      .flow-node small {
+        display: block;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.45;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .flow-node__state {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: var(--tertiary);
+        font-family: var(--utility-font);
+        font-size: 10px;
+      }
+
+      .flow-node.is-active .flow-node__state {
+        color: var(--blue);
+      }
+
+      .flow-node.is-done .flow-node__state {
+        color: var(--green);
+      }
+
+      .flow-link {
+        align-self: center;
+        justify-self: stretch;
+        height: 1px;
+        position: relative;
+        background: var(--line-strong);
+      }
+
+      .flow-link::after {
+        content: "";
+        position: absolute;
+        top: -3px;
+        right: -1px;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 6px solid var(--line-strong);
+      }
+
+      .flow-link.is-active {
+        background: var(--blue);
+      }
+
+      .flow-link.is-active::after {
+        border-left-color: var(--blue);
+      }
+
+      .flow-link--one {
+        grid-column: 1 / 2;
+        grid-row: 1;
+      }
+
+      .flow-link--two {
+        grid-column: 2 / 3;
+        grid-row: 1;
+      }
+
+      .flow-link--three {
+        grid-column: 2 / 3;
+        grid-row: 3;
+      }
+
+      .flow-node--one {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .flow-node--two {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .flow-node--three {
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      .flow-node--four {
+        grid-column: 2;
+        grid-row: 3;
+      }
+
+      .flow-branch {
+        grid-column: 2;
+        grid-row: 2;
+        align-self: center;
+        justify-self: center;
+        padding: 4px 7px;
+        border: 1px solid #f1d79d;
+        border-radius: 4px;
+        color: var(--amber);
+        background: var(--amber-soft);
+        font-size: 9px;
+      }
+
+      .flow-area__footer {
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 16px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .flow-area__footer strong {
+        color: var(--blue-dark);
+        font-weight: 650;
+      }
+
+      .flow-collapsed-note {
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        color: var(--muted);
+        font-size: 10px;
+        background: #fbfcfe;
+      }
+
+      .test-panel,
+      .bench-panel,
+      .focus-chat,
+      .focus-details {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        background: var(--surface);
+      }
+
+      .test-panel,
+      .focus-details {
+        border-left: 1px solid var(--line);
+      }
+
+      .panel-heading {
+        min-height: 58px;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 14px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-heading > div {
+        min-width: 0;
+      }
+
+      .panel-heading__status {
+        flex: 0 0 auto;
+      }
+
+      .snapshot-strip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 43px;
+        padding: 8px 14px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--surface-subtle);
+        font-size: 10px;
+      }
+
+      .snapshot-strip__copy {
+        min-width: 0;
+        display: grid;
+        gap: 2px;
+      }
+
+      .snapshot-strip__copy strong {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .snapshot-strip__copy span {
+        color: var(--muted);
+        font-size: 9px;
+      }
+
+      .test-context-strip {
+        display: grid;
+        gap: 3px;
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-subtle);
+      }
+
+      .test-context-strip strong {
+        color: var(--ink);
+        font-size: 11px;
+      }
+
+      .test-context-strip > span,
+      .test-context-strip__details {
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.45;
+      }
+
+      .test-context-strip details {
+        margin-top: 3px;
+      }
+
+      .test-context-strip summary,
+      .diagnostic-details summary {
+        cursor: pointer;
+        color: var(--blue-dark);
+        font-size: 9px;
+      }
+
+      .test-context-strip__details {
+        margin-top: 5px;
+        padding-top: 5px;
+        border-top: 1px solid var(--line);
+      }
+
+      .role-picker {
+        display: grid;
+        gap: 5px;
+        padding: 12px 14px 8px;
+      }
+
+      .role-picker label,
+      .field-label {
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .role-picker select {
+        width: 100%;
+        min-height: 34px;
+        padding: 0 9px;
+        border: 1px solid var(--line-strong);
+        color: var(--ink);
+        background: var(--surface);
+        font-size: 11px;
+      }
+
+      .role-picker select:disabled {
+        cursor: not-allowed;
+        color: var(--muted);
+        background: var(--surface-subtle);
+      }
+
+      .test-panel__scope {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) max-content;
+        gap: 8px;
+        margin: 0 14px 2px;
+        padding: 8px 9px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: var(--surface-subtle);
+      }
+
+      .test-panel__scope-copy {
+        min-width: 0;
+      }
+
+      .test-panel__scope-copy strong,
+      .test-panel__scope-copy span {
+        display: block;
+      }
+
+      .test-panel__scope-copy strong {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .test-panel__scope-copy span {
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.4;
+      }
+
+      .test-panel__scope-state {
+        align-self: center;
+        color: var(--green);
+        font-family: var(--utility-font);
+        font-size: 9px;
+        white-space: nowrap;
+      }
+
+      .stage-progress {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        padding: 7px 14px 9px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stage-progress__step {
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 5px;
+        padding: 5px 4px;
+        border-radius: 4px;
+        color: var(--tertiary);
+        background: var(--surface-subtle);
+      }
+
+      .stage-progress__step.is-active {
+        color: var(--blue-dark);
+        background: var(--blue-soft);
+      }
+
+      .stage-progress__step.is-done {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .stage-progress__number {
+        width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        font-family: var(--utility-font);
+        font-size: 8px;
+      }
+
+      .stage-progress__step strong {
+        overflow: hidden;
+        font-size: 8px;
+        font-weight: 650;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .chat-log {
+        min-height: 230px;
+        flex: 1;
+        overflow: auto;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        background: #fcfdff;
+      }
+
+      .chat-empty {
+        min-height: 180px;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 9px;
+        padding: 20px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .chat-empty__mark {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #b9d0ff;
+        border-radius: 50%;
+        color: var(--blue);
+        background: var(--blue-soft);
+        font-family: var(--utility-font);
+        font-size: 14px;
+      }
+
+      .chat-empty strong {
+        color: var(--ink);
+        font-size: 12px;
+      }
+
+      .chat-empty p {
+        max-width: 240px;
+        margin: 0;
+        font-size: 10px;
+        line-height: 1.55;
+      }
+
+      .message {
+        max-width: 88%;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 1.55;
+      }
+
+      .message__meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 4px;
+        color: var(--tertiary);
+        font-family: var(--utility-font);
+        font-size: 9px;
+      }
+
+      .message--role {
+        align-self: flex-start;
+        background: var(--surface);
+      }
+
+      .message--learner {
+        align-self: flex-end;
+        border-color: #c8d9ff;
+        background: var(--blue-soft);
+      }
+
+      .message--system {
+        align-self: center;
+        max-width: 96%;
+        border-color: #d9d1f9;
+        color: var(--purple);
+        background: var(--purple-soft);
+        font-size: 10px;
+      }
+
+      .message--hint {
+        align-self: center;
+        max-width: 96%;
+        border-color: #f1d79d;
+        color: var(--amber);
+        background: var(--amber-soft);
+        font-size: 10px;
+      }
+
+      .message--result {
+        align-self: center;
+        max-width: 96%;
+        border-color: #b7e4ca;
+        color: var(--green);
+        background: var(--green-soft);
+        font-size: 10px;
+      }
+
+      .message p {
+        margin: 0;
+      }
+
+      .diagnostic-strip {
+        border-top: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .diagnostic-details {
+        margin: 0 14px 10px;
+        padding-top: 8px;
+        border-top: 1px solid var(--line);
+      }
+
+      .diagnostic-details__content {
+        display: grid;
+        gap: 8px;
+        padding-top: 8px;
+      }
+
+      .diagnostic-details__content .diagnostic-card {
+        min-height: 0;
+      }
+
+      .test-error {
+        display: grid;
+        gap: 7px;
+        padding: 11px 14px;
+        border-top: 1px solid #f0b9b9;
+        border-bottom: 1px solid #f0b9b9;
+        color: var(--red);
+        background: var(--red-soft);
+      }
+
+      .test-error strong {
+        font-size: 11px;
+      }
+
+      .test-error p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.45;
+      }
+
+      .test-error button {
+        justify-self: start;
+        min-height: 28px;
+        padding: 0 9px;
+        border: 1px solid #e5a5a5;
+        color: var(--red);
+        background: var(--surface);
+        font-size: 10px;
+      }
+
+      .diagnostic-header {
+        min-height: 43px;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0 14px;
+      }
+
+      .diagnostic-header strong {
+        color: var(--ink);
+        font-size: 11px;
+      }
+
+      .diagnostic-header span {
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .diagnostic-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0 14px 11px;
+      }
+
+      .diagnostic-card {
+        min-width: 0;
+        min-height: 52px;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: var(--surface-subtle);
+      }
+
+      .diagnostic-card__label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--tertiary);
+        font-size: 9px;
+      }
+
+      .diagnostic-card strong,
+      .diagnostic-card span:last-child {
+        display: block;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: 10px;
+        font-weight: 650;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .diagnostic-card.is-branch strong {
+        color: var(--amber);
+      }
+
+      .diagnostic-card.is-hint strong {
+        color: var(--purple);
+      }
+
+      .evaluation-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 14px 10px;
+        border-top: 1px solid var(--line);
+      }
+
+      .evaluation-row__copy {
+        min-width: 0;
+      }
+
+      .evaluation-row__copy strong,
+      .evaluation-row__copy span {
+        display: block;
+      }
+
+      .evaluation-row__copy strong {
+        color: var(--ink);
+        font-size: 10px;
+      }
+
+      .evaluation-row__copy span {
+        margin-top: 3px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 9px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .score-number {
+        flex: 0 0 auto;
+        color: var(--blue-dark);
+        font-family: var(--data-font);
+        font-size: 18px;
+        font-weight: 750;
+      }
+
+      .chat-footer {
+        align-items: flex-end;
+        gap: 7px;
+        padding: 10px 14px 12px;
+        border-top: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .chat-footer textarea {
+        min-width: 0;
+        min-height: 38px;
+        flex: 1;
+        resize: vertical;
+        padding: 9px 10px;
+        border: 1px solid var(--line-strong);
+        color: var(--ink);
+        background: var(--surface);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      .chat-footer textarea::placeholder {
+        color: var(--tertiary);
+      }
+
+      .send-button {
+        min-width: 56px;
+        min-height: 38px;
+        padding: 0 9px;
+      }
+
+      .test-actions {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0 14px;
+        border-top: 1px solid var(--line);
+      }
+
+      .test-actions__left,
+      .test-actions__right {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .test-actions button {
+        min-height: 28px;
+        padding: 0 8px;
+        border: 0;
+        color: var(--muted);
+        background: transparent;
+        font-size: 10px;
+      }
+
+      .test-actions button:hover {
+        color: var(--blue-dark);
+        background: var(--blue-soft);
+      }
+
+      .test-actions button[data-action="end"] {
+        color: var(--red);
+      }
+
+      .variant-b .editor-surface {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .variant-b .flow-area {
+        min-height: 430px;
+        flex: 1;
+      }
+
+      .variant-b .flow-canvas {
+        min-height: 315px;
+      }
+
+      .bench-panel {
+        min-height: 335px;
+        border-top: 1px solid var(--line);
+      }
+
+      .bench-heading {
+        min-height: 49px;
+      }
+
+      .bench-content {
+        min-height: 285px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(270px, 0.8fr);
+      }
+
+      .bench-panel .chat-log {
+        min-height: 190px;
+        border-right: 1px solid var(--line);
+      }
+
+      .bench-panel .chat-footer {
+        border-right: 1px solid var(--line);
+      }
+
+      .bench-diagnostics {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bench-diagnostics .diagnostic-strip {
+        flex: 1;
+        border-top: 0;
+      }
+
+      .bench-diagnostics .diagnostic-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .variant-c {
+        min-height: 100vh;
+        background: #eef2f7;
+      }
+
+      .focus-surface {
+        min-height: calc(100vh - 90px);
+        margin: 16px max(18px, calc((100vw - 1440px) / 2));
+      }
+
+      .focus-header {
+        min-height: 57px;
+      }
+
+      .focus-header__title {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .focus-header__title strong {
+        white-space: nowrap;
+      }
+
+      .focus-header__title span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .focus-grid {
+        min-height: 620px;
+        display: grid;
+        grid-template-columns: 214px minmax(0, 1fr) 310px;
+      }
+
+      .stage-rail {
+        min-width: 0;
+        padding: 16px 12px;
+        border-right: 1px solid var(--line);
+        background: var(--surface-subtle);
+      }
+
+      .stage-rail__heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 0 6px 9px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stage-rail__heading strong {
+        color: var(--ink);
+        font-size: 11px;
+      }
+
+      .stage-rail__heading span {
+        color: var(--tertiary);
+        font-family: var(--utility-font);
+        font-size: 9px;
+      }
+
+      .stage-rail__list {
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .stage-rail__item {
+        position: relative;
+        align-items: flex-start;
+        gap: 8px;
+        min-width: 0;
+        padding: 9px 6px;
+        border-radius: 5px;
+      }
+
+      .stage-rail__item.is-active {
+        background: var(--blue-soft);
+      }
+
+      .stage-rail__item::after {
+        content: "";
+        position: absolute;
+        top: 31px;
+        left: 16px;
+        width: 1px;
+        height: 25px;
+        background: var(--line-strong);
+      }
+
+      .stage-rail__item:last-child::after {
+        display: none;
+      }
+
+      .stage-rail__number {
+        position: relative;
+        z-index: 1;
+        width: 21px;
+        height: 21px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line-strong);
+        border-radius: 50%;
+        color: var(--muted);
+        background: var(--surface);
+        font-family: var(--utility-font);
+        font-size: 9px;
+      }
+
+      .stage-rail__item.is-active .stage-rail__number {
+        border-color: var(--blue);
+        color: var(--blue);
+        background: #fff;
+      }
+
+      .stage-rail__item.is-done .stage-rail__number {
+        border-color: #a8d9bb;
+        color: var(--green);
+        background: var(--green-soft);
+      }
+
+      .stage-rail__copy {
+        min-width: 0;
+      }
+
+      .stage-rail__copy strong,
+      .stage-rail__copy span {
+        display: block;
+      }
+
+      .stage-rail__copy strong {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .stage-rail__copy span {
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.4;
+      }
+
+      .focus-chat .chat-log {
+        min-height: 0;
+      }
+
+      .focus-details {
+        border-left: 1px solid var(--line);
+      }
+
+      .focus-details__section {
+        padding: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .focus-details__section h3 {
+        margin: 0 0 10px;
+        color: var(--ink);
+        font-size: 11px;
+      }
+
+      .focus-details__section p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.55;
+      }
+
+      .evidence-list {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 7px;
+        list-style: none;
+      }
+
+      .evidence-list li {
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        color: var(--muted);
+        background: var(--surface-subtle);
+        font-size: 10px;
+        line-height: 1.45;
+      }
+
+      .evidence-list li strong {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--ink);
+        font-size: 10px;
+      }
+
+      .result-summary {
+        display: grid;
+        gap: 8px;
+        padding: 12px 14px;
+        border-top: 1px solid var(--line);
+        background: var(--surface-subtle);
+      }
+
+      .result-summary__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+
+      .result-summary__row strong {
+        color: var(--ink);
+        font-weight: 650;
+      }
+
+      .test-result-summary {
+        display: grid;
+        gap: 8px;
+        padding: 11px 14px 12px;
+        border-top: 1px solid var(--line);
+        background: var(--surface-subtle);
+      }
+
+      .test-result-summary__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .test-result-summary__heading strong {
+        color: var(--ink);
+        font-size: 10px;
+      }
+
+      .test-result-summary__route {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 9px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .test-result-summary__route strong {
+        overflow: hidden;
+        color: var(--blue-dark);
+        font-weight: 650;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .test-result-summary__note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.45;
+      }
+
+      .prototype-switcher {
+        position: relative;
+        z-index: 30;
+        min-width: min(390px, calc(100vw - 28px));
+        width: min(390px, calc(100vw - 28px));
+        margin: 16px auto;
+        display: grid;
+        grid-template-columns: 36px minmax(0, 1fr) 36px;
+        align-items: center;
+        gap: 8px;
+        padding: 7px;
+        border: 1px solid #b8c4d5;
+        border-radius: 8px;
+        background: rgb(23 32 51 / 96%);
+        box-shadow: var(--shadow-overlay);
+      }
+
+      .prototype-switcher button {
+        width: 36px;
+        height: 31px;
+        border: 0;
+        color: #dbe6f5;
+        background: rgb(255 255 255 / 9%);
+        font-family: var(--utility-font);
+        font-size: 15px;
+      }
+
+      .prototype-switcher button:hover {
+        color: #fff;
+        background: rgb(255 255 255 / 17%);
+      }
+
+      .prototype-switcher__label {
+        min-width: 0;
+        text-align: center;
+      }
+
+      .prototype-switcher__label strong,
+      .prototype-switcher__label span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .prototype-switcher__label strong {
+        color: #fff;
+        font-size: 11px;
+      }
+
+      .prototype-switcher__label span {
+        margin-top: 2px;
+        color: #aebbd0;
+        font-size: 9px;
+      }
+
+      .variant-b .prototype-switcher,
+      .variant-c .prototype-switcher {
+        margin-top: 15px;
+      }
+
+      @media (max-width: 1050px) {
+        .editor-workspace {
+          grid-template-columns: minmax(0, 1fr) 350px;
+        }
+
+        .focus-grid {
+          grid-template-columns: 176px minmax(0, 1fr) 270px;
+        }
+      }
+
+      @media (max-width: 840px) {
+        .app-header {
+          padding: 0 13px;
+        }
+
+        .header-link {
+          display: none;
+        }
+
+        .editor-shell {
+          padding: 12px 10px 22px;
+        }
+
+        .editor-topline {
+          display: grid;
+          gap: 10px;
+        }
+
+        .page-actions {
+          justify-content: flex-start;
+        }
+
+        .variant-a .editor-workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .variant-a .flow-area {
+          min-height: 0;
+        }
+
+        .variant-a .test-panel {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+
+        .flow-canvas {
+          min-height: 300px;
+          padding: 35px 16px 20px;
+        }
+
+        .variant-a .flow-area.is-collapsed .flow-canvas {
+          display: none;
+        }
+
+        .variant-a .flow-area.is-collapsed .flow-area__footer {
+          min-height: 34px;
+          border-top: 0;
+        }
+
+        .flow-graph {
+          gap: 14px 18px;
+        }
+
+        .focus-surface {
+          margin: 10px;
+        }
+
+        .focus-grid {
+          grid-template-columns: 1fr;
+          min-height: 0;
+        }
+
+        .stage-rail {
+          padding: 10px;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .stage-rail__heading {
+          padding-bottom: 7px;
+        }
+
+        .stage-rail__list {
+          display: flex;
+          gap: 6px;
+          overflow-x: auto;
+          margin-top: 8px;
+        }
+
+        .stage-rail__item {
+          flex: 0 0 128px;
+          align-items: center;
+          padding: 7px;
+          border: 1px solid var(--line);
+          background: var(--surface);
+        }
+
+        .stage-rail__item::after {
+          display: none;
+        }
+
+        .focus-chat {
+          min-height: 570px;
+        }
+
+        .focus-details {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .brand-lockup span:last-child,
+        .page-actions .snapshot-chip {
+          display: none;
+        }
+
+        .editor-title {
+          font-size: 18px;
+        }
+
+        .editor-subtitle {
+          max-width: 330px;
+          line-height: 1.5;
+        }
+
+        .canvas-toolbar,
+        .bench-heading,
+        .focus-header {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 10px 12px;
+        }
+
+        .canvas-toolbar,
+        .bench-heading {
+          min-height: 72px;
+        }
+
+        .canvas-toolbar__actions,
+        .bench-heading__actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+
+        .flow-area__meta {
+          align-items: flex-start;
+          flex-direction: column;
+          justify-content: center;
+          min-height: 56px;
+          padding: 8px 12px;
+        }
+
+        .flow-canvas {
+          min-height: 220px;
+          padding: 30px 8px 16px;
+        }
+
+        .flow-graph {
+          min-width: 540px;
+          min-height: 220px;
+          transform: scale(0.82);
+          transform-origin: center;
+        }
+
+        .flow-canvas {
+          overflow-x: auto;
+        }
+
+        .bench-content {
+          grid-template-columns: 1fr;
+        }
+
+        .bench-panel .chat-log,
+        .bench-panel .chat-footer {
+          border-right: 0;
+        }
+
+        .bench-diagnostics {
+          border-top: 1px solid var(--line);
+        }
+
+        .test-actions {
+          align-items: flex-start;
+          flex-direction: column;
+          min-height: 70px;
+          justify-content: center;
+        }
+
+        .variant-a .test-panel {
+          scroll-margin-top: 12px;
+        }
+
+        .variant-a .test-panel .chat-log {
+          min-height: 150px;
+          max-height: 220px;
+        }
+
+        .variant-a .test-panel .chat-empty {
+          min-height: 92px;
+          gap: 4px;
+          padding: 8px;
+        }
+
+        .variant-a .test-panel .chat-empty__mark {
+          display: none;
+        }
+
+        .variant-a .test-panel .chat-empty p {
+          white-space: nowrap;
+        }
+
+        .prototype-switcher {
+          bottom: 9px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      (() => {
+        const variants = ["A", "B", "C"];
+        const variantMeta = {
+          A: { title: "侧栏陪跑", description: "编辑器保持可见，测试面板在右侧连续工作" },
+          B: { title: "画布下方测试台", description: "沿流程图向下进入对话，路径关系最清楚" },
+          C: { title: "聚焦试运行", description: "进入对练专注面，阶段与证据常驻" },
+        };
+        const stages = [
+          { title: "核实情况", note: "识别客户疑虑并复述事实" },
+          { title: "判断责任", note: "确认差异来源与处理边界" },
+          { title: "说明处理", note: "给出可执行的处理方案" },
+          { title: "确认下一步", note: "获得对方确认并结束对练" },
+        ];
+        const roles = ["采购负责人 · 林岚", "门店经理 · 周宁", "客户成功负责人 · 许昭"];
+        const app = document.querySelector("#app");
+
+        const query = new URLSearchParams(location.search);
+        const previewError = query.get("error");
+        const previewErrors = {
+          timeout: {
+            title: "角色暂时没有回应",
+            message: "本轮没有收到回应，测试没有丢失。",
+            action: "重试本轮",
+          },
+          path: {
+            title: "流程暂时无法继续",
+            message: "当前回应没有找到下一步，先回到本轮重新测试。",
+            action: "重试本轮",
+          },
+          evaluation: {
+            title: "评价暂不可用",
+            message: "对话已保留，可以稍后重新生成本次评价。",
+            action: "重试评价",
+          },
+        };
+
+        let currentVariant = query.get("variant")?.toUpperCase();
+        if (!variants.includes(currentVariant)) currentVariant = "A";
+        let flowCollapsed =
+          currentVariant === "A" && window.matchMedia("(max-width: 620px)").matches;
+
+        function createState() {
+          return {
+            status: "ready",
+            role: roles[0],
+            draft: "",
+            stage: 0,
+            branch: "等待开始",
+            hintCount: 0,
+            turn: 0,
+            messages: [],
+            result: null,
+            endReason: null,
+            error: null,
+          };
+        }
+
+        let state = createState();
+
+        function escapeHtml(value) {
+          return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+
+        function setVariant(next) {
+          currentVariant = next;
+          const url = new URL(location.href);
+          url.searchParams.set("variant", next);
+          history.replaceState({}, "", url);
+          render();
+        }
+
+        function resetState() {
+          state = createState();
+          render();
+        }
+
+        function focusTestInput() {
+          if (!window.matchMedia("(max-width: 620px)").matches) return;
+          window.setTimeout(() => document.querySelector("[data-input]")?.focus(), 0);
+        }
+
+        function getPreviewError() {
+          return previewErrors[previewError] ?? null;
+        }
+
+        // 试运行必须区分“流程自然完成”和“运营者主动结束”，否则预览结果会被误读成正式成绩。
+        function finishTest(reason) {
+          state.status = "done";
+          state.endReason = reason;
+          state.result = reason === "completed" ? "已完成" : "已结束，未完成";
+          state.branch = reason === "completed" ? "已完成全部步骤" : "已停止测试";
+          state.messages.push({
+            kind: reason === "completed" ? "result" : "system",
+            label: reason === "completed" ? "试运行结果" : "测试状态",
+            text:
+              reason === "completed"
+                ? "流程已走完。本次评价只用于检查，不生成正式成绩或培训任务记录。"
+                : "你已结束本次测试，当前路径已保留，不生成正式成绩。",
+          });
+          render();
+        }
+
+        function startTest() {
+          if (state.status === "active" || state.status === "saving") return;
+          state.status = "saving";
+          state.stage = 0;
+          state.branch = "正在准备测试";
+          state.hintCount = 0;
+          state.turn = 0;
+          state.messages = [];
+          state.result = null;
+          state.endReason = null;
+          state.error = null;
+          state.draft = "";
+          render();
+          window.setTimeout(() => {
+            if (state.status !== "saving") return;
+            state.status = "active";
+            state.branch = "等待学员回应";
+            state.messages = [
+              {
+                kind: "role",
+                label: "对练角色",
+                text: "你好，我是星河公司的采购负责人。请先了解一下这次发票金额差异。",
+              },
+            ];
+            const error = getPreviewError();
+            if (error) {
+              state.status = "error";
+              state.error = error;
+              state.branch = "测试暂停";
+            }
+            render();
+            if (state.status === "active") focusTestInput();
+          }, 450);
+        }
+
+        function sendMessage() {
+          if (state.status !== "active") return;
+          const input = document.querySelector("[data-input]");
+          const value = input?.value.trim() ?? "";
+          if (!value) return;
+          state.messages.push({ kind: "learner", label: "学员视角", text: value });
+          state.turn += 1;
+          if (state.turn === 1) {
+            state.stage = 1;
+            state.branch = "已进入下一步";
+            state.messages.push({
+              kind: "role",
+              label: "对练角色",
+              text: "我核对了上一批货，发现发票金额和合同不一致。你先说说准备怎么判断责任。",
+            });
+          } else {
+            state.stage = Math.min(state.stage + 1, stages.length - 1);
+            state.branch = state.stage >= stages.length - 1 ? "已到达最后一步" : "按流程继续";
+            state.messages.push({
+              kind: "role",
+              label: "对练角色",
+              text:
+                state.stage >= 2
+                  ? "好的，差异确认是录入错误。请说明你准备如何处理，并给出下一步。"
+                  : "我会继续补充情况，请你围绕事实和处理边界继续追问。",
+            });
+          }
+          state.draft = "";
+          if (state.stage >= stages.length - 1) finishTest("completed");
+          else render();
+        }
+
+        function requestHint() {
+          if (state.status !== "active") return;
+          state.hintCount += 1;
+          state.messages.push({
+            kind: "hint",
+            label: `对练教练 · 第 ${state.hintCount} 级提示`,
+            text:
+              state.hintCount === 1
+                ? "可以先复述已确认的事实，再询问差异出现在哪个环节。"
+                : "请把处理方案拆成责任确认、补正动作和向客户同步三个部分。",
+          });
+          render();
+        }
+
+        function endTest() {
+          if (state.status !== "active") return;
+          finishTest("operator");
+        }
+
+        function retryTest() {
+          if (state.status !== "error") return;
+          state.status = "active";
+          state.error = null;
+          state.branch = "等待你的回应";
+          state.messages.push({
+            kind: "system",
+            label: "测试状态",
+            text: "已恢复，可以继续测试本轮。",
+          });
+          render();
+          focusTestInput();
+        }
+
+        function renderStatus() {
+          const meta =
+            state.status === "saving"
+              ? ["保存中", "is-saving"]
+              : state.status === "active"
+                ? ["测试中", "is-active"]
+                : state.status === "done"
+                  ? ["已结束", "is-done"]
+                  : state.status === "error"
+                    ? ["需要处理", "is-error"]
+                    : ["待启动", "is-ready"];
+          return `<span class="status-chip ${meta[1]}" role="status" aria-live="polite"><span aria-hidden="true">●</span>${meta[0]}</span>`;
+        }
+
+        function renderSnapshot() {
+          const snapshotState =
+            state.status === "saving"
+              ? "正在绑定只读运行副本"
+              : state.status === "active"
+                ? "测试中 · 不随画布编辑变化"
+                : state.status === "done"
+                  ? "本次会话已结束 · 快照仍可回看"
+                  : "刚刚保存 · 只读运行副本";
+          return `<div class="snapshot-strip">
+            <span class="snapshot-chip"><span aria-hidden="true">✓</span>草稿快照已保存</span>
+            <div class="snapshot-strip__copy"><strong>销售异议处理 · 草稿 #07</strong><span>${snapshotState}</span></div>
+          </div>`;
+        }
+
+        function renderTestContext() {
+          const copy =
+            state.status === "ready"
+              ? ["当前内容可以测试", "开始一段临时对话，不会影响正式数据。"]
+              : state.status === "active"
+                ? ["测试进行中", "当前对话只用于检查流程。"]
+                : state.status === "error"
+                  ? ["测试已暂停", "处理提示后可以继续本轮。"]
+                  : ["本次测试已结束", "结果只用于检查当前流程。"];
+          return `<div class="test-context-strip"><strong>${copy[0]}</strong><span>${copy[1]}</span>${
+            state.status === "ready"
+              ? `<details><summary>查看测试说明</summary><div class="test-context-strip__details">系统会使用当前已保存的内容进行一次临时测试，结束后不会生成正式记录。</div></details>`
+              : ""
+          }</div>`;
+        }
+
+        function renderFlow() {
+          const active = state.stage;
+          return `<div class="flow-canvas" aria-label="对练流程画布">
+            <span class="flow-canvas__label">流程预览</span>
+            <div class="flow-graph">
+              <div class="flow-node flow-node--one ${active === 0 ? "is-active" : "is-done"}">
+                <span class="flow-node__eyebrow">STAGE 01</span><span class="flow-node__state">${active > 0 ? "✓" : "●"}</span>
+                <strong>核实情况</strong><small>识别客户疑虑并复述事实</small>
+              </div>
+              <div class="flow-link flow-link--one ${active > 0 ? "is-active" : ""}" aria-hidden="true"></div>
+              <div class="flow-node flow-node--two ${active === 1 ? "is-active" : active > 1 ? "is-done" : ""}">
+                <span class="flow-node__eyebrow">STAGE 02</span><span class="flow-node__state">${active > 1 ? "✓" : active === 1 ? "●" : "○"}</span>
+                <strong>判断责任</strong><small>确认差异来源与处理边界</small>
+              </div>
+              <div class="flow-link flow-link--two ${active > 1 ? "is-active" : ""}" aria-hidden="true"></div>
+              <div class="flow-node flow-node--three ${active === 2 ? "is-active" : active > 2 ? "is-done" : ""}">
+                <span class="flow-node__eyebrow">STAGE 03</span><span class="flow-node__state">${active > 2 ? "✓" : active === 2 ? "●" : "○"}</span>
+                <strong>说明处理</strong><small>给出可执行的处理方案</small>
+              </div>
+              <div class="flow-branch">${escapeHtml(state.branch)}</div>
+              <div class="flow-link flow-link--three ${active > 2 ? "is-active" : ""}" aria-hidden="true"></div>
+              <div class="flow-node flow-node--four ${active === 3 ? "is-active" : ""}">
+                <span class="flow-node__eyebrow">STAGE 04</span><span class="flow-node__state">${active === 3 ? "●" : "○"}</span>
+                <strong>确认下一步</strong><small>获得对方确认并结束对练</small>
+              </div>
+            </div>
+          </div>`;
+        }
+
+        function renderMessages() {
+          if (state.status === "ready" || state.status === "saving") {
+            const saving = state.status === "saving";
+            return `<div class="chat-empty">
+              <span class="chat-empty__mark" aria-hidden="true">${saving ? "…" : "▶"}</span>
+              <strong>${saving ? "正在准备测试" : "准备好开始测试吗？"}</strong>
+              <p>${saving ? "马上进入临时对话，不会影响正式数据。" : "选择角色后开始一段临时对话。"}</p>
+              <button class="primary-button" type="button" data-action="start" ${saving ? "disabled" : ""}><span class="icon" aria-hidden="true">${saving ? "…" : "▶"}</span>${saving ? "准备中" : "开始测试"}</button>
+            </div>`;
+          }
+          return state.messages
+            .map(
+              (message) => `<article class="message message--${message.kind}">
+                <div class="message__meta"><span>${escapeHtml(message.label)}</span><span>${message.kind === "system" ? "状态" : "刚刚"}</span></div>
+                <p>${escapeHtml(message.text)}</p>
+              </article>`,
+            )
+            .join("");
+        }
+
+        function renderDiagnostics() {
+          const current = stages[state.stage];
+          const hint = state.hintCount ? `已使用 ${state.hintCount} 次` : "未使用";
+          const score = state.endReason === "completed" ? "82" : "--";
+          const progressLabel =
+            state.status === "done"
+              ? "测试结果"
+              : state.status === "error"
+                ? "需要处理"
+                : "实时更新";
+          const detailOpen = state.endReason === "completed" ? " open" : "";
+          return `<div class="diagnostic-strip">
+            <div class="diagnostic-header"><strong>当前进展</strong><span>${progressLabel}</span></div>
+            <div class="diagnostic-grid">
+              <div class="diagnostic-card"><span class="diagnostic-card__label">当前步骤</span><strong>${escapeHtml(current.title)}</strong></div>
+              <div class="diagnostic-card is-branch"><span class="diagnostic-card__label">下一步</span><strong>${escapeHtml(state.branch)}</strong></div>
+            </div>
+            <details class="diagnostic-details"${detailOpen}><summary>查看测试细节</summary><div class="diagnostic-details__content"><div class="diagnostic-grid"><div class="diagnostic-card"><span class="diagnostic-card__label">本步要点</span><strong>${escapeHtml(current.note)}</strong></div><div class="diagnostic-card is-hint"><span class="diagnostic-card__label">提示使用</span><strong>${hint}</strong></div></div><div class="evaluation-row"><div class="evaluation-row__copy"><strong>评价预览</strong><span>${state.endReason === "completed" ? "仅用于本次检查" : state.status === "done" ? "主动结束，不生成评价" : "完成流程后显示"}</span></div><span class="score-number">${score}</span></div></div></details>
+          </div>`;
+        }
+
+        function renderTestError() {
+          if (state.status !== "error" || !state.error) return "";
+          return `<section class="test-error" role="alert"><strong>${escapeHtml(state.error.title)}</strong><p>${escapeHtml(state.error.message)}</p><button type="button" data-action="retry">${escapeHtml(state.error.action)}</button></section>`;
+        }
+
+        function renderChat(options = {}) {
+          const disabled = state.status !== "active";
+          const actionButtons = `<div class="test-actions">
+            <div class="test-actions__left"><button type="button" data-action="hint" ${disabled ? "disabled" : ""}><span class="icon" aria-hidden="true">?</span>请求提示</button><button type="button" data-action="reset"><span class="icon" aria-hidden="true">↺</span>重置</button></div>
+            <div class="test-actions__right"><button type="button" data-action="end" ${disabled ? "disabled" : ""}>结束试运行</button></div>
+          </div>`;
+          const footer =
+            state.status === "active"
+              ? `<div class="chat-footer"><textarea data-input rows="1" placeholder="以学员视角输入回应，Enter 发送" aria-label="学员回应">${escapeHtml(state.draft)}</textarea><button class="send-button" type="button" data-action="send" ${disabled ? "disabled" : ""}><span class="icon" aria-hidden="true">↑</span>发送</button></div>`
+              : "";
+          const showDiagnostics =
+            state.status === "active" || state.status === "done" || state.status === "error";
+          const showActions = state.status !== "ready" && state.status !== "saving";
+          return `<div class="test-chat ${options.className ?? ""}"><div class="chat-log" data-chat-log>${renderMessages()}</div>${renderTestError()}${showDiagnostics ? renderDiagnostics() : ""}${footer}${showActions ? actionButtons : ""}</div>`;
+        }
+
+        function renderStageProgress() {
+          return `<div class="stage-progress" aria-label="试运行阶段进度">${stages
+            .map(
+              (stage, index) =>
+                `<div class="stage-progress__step ${index === state.stage ? "is-active" : index < state.stage ? "is-done" : ""}"><span class="stage-progress__number">${index < state.stage ? "✓" : String(index + 1).padStart(2, "0")}</span><strong>${stage.title}</strong></div>`,
+            )
+            .join("")}</div>`;
+        }
+
+        function renderTestResultSummary() {
+          if (state.status !== "done") return "";
+          const path = stages
+            .slice(0, state.stage + 1)
+            .map((stage) => stage.title)
+            .join(" → ");
+          return `<div class="test-result-summary"><div class="test-result-summary__heading"><strong>本次测试摘要</strong><span class="result-badge">${escapeHtml(state.result)}</span></div><div class="test-result-summary__route"><span>实际路径</span><strong>${escapeHtml(path)}</strong></div><p class="test-result-summary__note">结果只用于当前流程检查，不生成正式对练尝试、成绩或培训任务记录。</p><button class="quiet-button" type="button" data-action="start"><span class="icon" aria-hidden="true">↺</span>再次测试</button></div>`;
+        }
+
+        function renderPanel() {
+          const roleDisabled = state.status !== "ready";
+          return `<aside class="test-panel test-panel--side"><div class="panel-heading"><div><strong>快速测试</strong><span>以学员视角检查流程</span></div><div class="panel-heading__status">${renderStatus()}</div></div>${renderTestContext()}<div class="role-picker"><label for="role-select">测试角色</label><select id="role-select" data-role ${roleDisabled ? "disabled" : ""}>${roles.map((role) => `<option ${role === state.role ? "selected" : ""}>${role}</option>`).join("")}</select></div>${renderStageProgress()}${renderChat()}${renderTestResultSummary()}</aside>`;
+        }
+
+        function renderCommonTopline() {
+          return `<div class="editor-topline"><div><div class="breadcrumb"><span>培训内容</span><span>/</span><strong>对练场景</strong><span>/</span><span>编辑流程</span></div><h1 class="editor-title">销售异议处理</h1><p class="editor-subtitle">流程编辑器 · 当前内容可测试 · 不影响正式数据</p></div><div class="page-actions"><button class="quiet-button" type="button" data-action="back"><span class="icon" aria-hidden="true">←</span>返回场景</button></div></div>`;
+        }
+
+        function renderCanvasToolbar() {
+          const flowAction =
+            currentVariant === "A"
+              ? `<button class="quiet-button" type="button" data-action="toggle-flow"><span class="icon" aria-hidden="true">${flowCollapsed ? "＋" : "－"}</span>${flowCollapsed ? "查看流程" : "收起流程"}</button>`
+              : "";
+          return `<div class="canvas-toolbar"><div class="section-heading"><span class="section-heading__mark" aria-hidden="true">⌘</span><div><strong>对练流程</strong><span>4 个阶段 · 当前阶段「${escapeHtml(stages[state.stage].title)}」</span></div></div><div class="canvas-toolbar__actions">${flowAction}<button class="quiet-button" type="button" data-action="focus"><span class="icon" aria-hidden="true">□</span>聚焦测试</button></div></div>`;
+        }
+
+        function renderVariantA() {
+          const flowClass = flowCollapsed ? "flow-area is-collapsed" : "flow-area";
+          const flowContent = flowCollapsed
+            ? `<div class="flow-collapsed-note">流程已收起，测试面板已前置。</div>`
+            : renderFlow();
+          return `<div class="prototype-frame variant-a"><header class="app-header">${renderBrand()}${renderHeaderActions()}</header><main class="editor-shell">${renderCommonTopline()}<section class="editor-surface">${renderCanvasToolbar()}<div class="editor-workspace"><section class="${flowClass}"><div class="flow-area__meta"><strong>流程画布</strong><span>${flowCollapsed ? "需要时再展开查看" : "点击阶段打开详情检查器"}</span></div>${flowContent}<div class="flow-area__footer"><span aria-hidden="true">●</span><span>当前测试阶段：</span><strong>${escapeHtml(stages[state.stage].title)}</strong><span>· ${flowCollapsed ? "测试面板已前置" : "画布保持可见"}</span></div></section>${renderPanel()}</div></section></main>${renderSwitcher()}</div>`;
+        }
+
+        function renderVariantB() {
+          return `<div class="prototype-frame variant-b"><header class="app-header">${renderBrand()}${renderHeaderActions()}</header><main class="editor-shell">${renderCommonTopline()}<section class="editor-surface">${renderCanvasToolbar()}<section class="flow-area"><div class="flow-area__meta"><strong>流程画布</strong><span>向下进入测试台，路径与对话处在同一纵向工作流</span></div>${renderFlow()}<div class="flow-area__footer"><span aria-hidden="true">●</span><span>测试台固定在流程图下方，适合先看路径再逐轮验证</span></div></section><section class="bench-panel"><div class="bench-heading"><div class="section-heading"><span class="section-heading__mark" aria-hidden="true">↳</span><div><strong>快速测试台</strong><span>草稿快照 · ${escapeHtml(state.role)}</span></div></div><div class="bench-heading__actions">${renderStatus()}<button class="quiet-button" type="button" data-action="focus"><span class="icon" aria-hidden="true">□</span>聚焦测试</button></div></div><div class="bench-content"><div>${renderSnapshot()}<div class="role-picker"><label for="role-select">选择对练角色</label><select id="role-select" data-role>${roles.map((role) => `<option ${role === state.role ? "selected" : ""}>${role}</option>`).join("")}</select></div>${renderChat({ className: "bench-chat" })}</div><div class="bench-diagnostics">${state.status === "ready" ? `<div class="chat-empty"><span class="chat-empty__mark" aria-hidden="true">▶</span><strong>准备好后从这里开始</strong><p>点击“保存并开始试运行”，下方会出现对话与路径诊断。</p><button class="primary-button" type="button" data-action="start"><span class="icon" aria-hidden="true">▶</span>保存并开始</button></div>` : renderDiagnostics()}</div></div></section></section></main>${renderSwitcher()}</div>`;
+        }
+
+        function renderStageRail() {
+          return `<aside class="stage-rail"><div class="stage-rail__heading"><strong>实际路径</strong><span>${state.stage + 1}/4</span></div><ol class="stage-rail__list">${stages
+            .map(
+              (stage, index) =>
+                `<li class="stage-rail__item ${index === state.stage ? "is-active" : index < state.stage ? "is-done" : ""}"><span class="stage-rail__number">${index < state.stage ? "✓" : String(index + 1).padStart(2, "0")}</span><span class="stage-rail__copy"><strong>${stage.title}</strong><span>${index === state.stage ? "当前阶段" : index < state.stage ? "已通过" : "未进入"}</span></span></li>`,
+            )
+            .join("")}</ol></aside>`;
+        }
+
+        function renderFocusDetails() {
+          const current = stages[state.stage];
+          return `<aside class="focus-details"><div class="focus-details__section"><h3>当前阶段</h3><p><strong>${escapeHtml(current.title)}</strong><br />${escapeHtml(current.note)}</p></div><div class="focus-details__section"><h3>分支判断</h3><ul class="evidence-list"><li><strong>${escapeHtml(state.branch)}</strong>系统沿已配置路径继续推进，未创建流程外分支。</li><li><strong>阶段轮次</strong>${state.turn + 1} / 建议上限 3 轮</li></ul></div><div class="focus-details__section"><h3>评价预览</h3><ul class="evidence-list"><li><strong>识别事实与责任</strong>${state.status === "done" ? "本次试运行已生成反馈摘要" : "完成试运行后显示评价结果"}</li><li><strong>记录边界</strong>不进入正式成绩与培训任务结果</li></ul></div>${state.status === "done" ? `<div class="result-summary"><div class="result-summary__row"><span>试运行状态</span><span class="result-badge">${escapeHtml(state.result)}</span></div><div class="result-summary__row"><span>经过阶段</span><strong>${state.stage + 1} 个</strong></div></div>` : ""}</aside>`;
+        }
+
+        function renderVariantC() {
+          return `<div class="prototype-frame variant-c"><header class="app-header">${renderBrand()}${renderHeaderActions()}</header><section class="focus-surface"><header class="focus-header"><div class="focus-header__title"><button class="icon-button" type="button" data-action="back" aria-label="返回流程编辑" title="返回流程编辑"><span aria-hidden="true">←</span></button><div><strong>对练试运行 · 销售异议处理</strong><span>从草稿快照进入 · ${escapeHtml(state.role)}</span></div></div><div class="focus-actions">${renderStatus()}<button class="quiet-button" type="button" data-action="reset"><span class="icon" aria-hidden="true">↺</span>重置</button></div></header><div class="focus-grid">${renderStageRail()}<main class="focus-chat"><div class="panel-heading"><div><strong>实时对话</strong><span>只显示本次试运行内容</span></div><button class="quiet-button" type="button" data-action="hint" ${state.status !== "active" ? "disabled" : ""}><span class="icon" aria-hidden="true">?</span>请求提示</button></div>${renderSnapshot()}<div class="role-picker"><label for="role-select">对练角色</label><select id="role-select" data-role>${roles.map((role) => `<option ${role === state.role ? "selected" : ""}>${role}</option>`).join("")}</select></div>${renderChat({ className: "focus-chat-inner" })}</main>${renderFocusDetails()}</div></section>${renderSwitcher()}</div>`;
+        }
+
+        function renderBrand() {
+          return `<div class="brand-lockup"><span class="brand-mark">AI</span><span>AICP 企业学训</span></div>`;
+        }
+
+        function renderHeaderActions() {
+          return `<div class="header-actions"><button class="header-link" type="button" data-action="back">返回工作台</button><button class="icon-button" type="button" aria-label="查看帮助" title="查看帮助"><span aria-hidden="true">?</span></button><button class="icon-button" type="button" aria-label="账户菜单" title="账户菜单"><span aria-hidden="true">林</span></button></div>`;
+        }
+
+        function renderSwitcher() {
+          const index = variants.indexOf(currentVariant);
+          const previous = variants[(index + variants.length - 1) % variants.length];
+          const next = variants[(index + 1) % variants.length];
+          const meta = variantMeta[currentVariant];
+          return `<nav class="prototype-switcher" aria-label="原型版本切换"><button type="button" data-variant="${previous}" aria-label="上一个版本" title="上一个版本">←</button><div class="prototype-switcher__label"><strong>原型版本 ${currentVariant} · ${meta.title}</strong><span>${meta.description}</span></div><button type="button" data-variant="${next}" aria-label="下一个版本" title="下一个版本">→</button></nav>`;
+        }
+
+        function render() {
+          if (currentVariant === "B") app.innerHTML = renderVariantB();
+          else if (currentVariant === "C") app.innerHTML = renderVariantC();
+          else app.innerHTML = renderVariantA();
+          const log = document.querySelector("[data-chat-log]");
+          if (log) log.scrollTop = log.scrollHeight;
+        }
+
+        app.addEventListener("click", (event) => {
+          const target = event.target.closest("[data-action], [data-variant]");
+          if (!target) return;
+          const action = target.dataset.action;
+          if (target.dataset.variant) setVariant(target.dataset.variant);
+          else if (action === "start") startTest();
+          else if (action === "send") sendMessage();
+          else if (action === "hint") requestHint();
+          else if (action === "end") endTest();
+          else if (action === "reset") resetState();
+          else if (action === "retry") retryTest();
+          else if (action === "toggle-flow") {
+            flowCollapsed = !flowCollapsed;
+            render();
+          } else if (action === "focus") setVariant("C");
+          else if (action === "back") window.alert("原型占位：返回对练场景列表");
+        });
+
+        app.addEventListener("input", (event) => {
+          if (event.target.matches("[data-input]")) state.draft = event.target.value;
+        });
+
+        app.addEventListener("change", (event) => {
+          if (event.target.matches("[data-role]")) {
+            state.role = event.target.value;
+            render();
+          }
+        });
+
+        app.addEventListener("keydown", (event) => {
+          if (event.target.matches("[data-input]") && event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          const tag = document.activeElement?.tagName;
+          if (tag === "INPUT" || tag === "TEXTAREA" || document.activeElement?.isContentEditable)
+            return;
+          if (event.key === "ArrowLeft") {
+            const index = variants.indexOf(currentVariant);
+            setVariant(variants[(index + variants.length - 1) % variants.length]);
+          }
+          if (event.key === "ArrowRight") {
+            const index = variants.indexOf(currentVariant);
+            setVariant(variants[(index + 1) % variants.length]);
+          }
+        });
+
+        window.addEventListener("popstate", () => {
+          const next = new URLSearchParams(location.search).get("variant")?.toUpperCase();
+          if (variants.includes(next)) {
+            currentVariant = next;
+            render();
+          }
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>

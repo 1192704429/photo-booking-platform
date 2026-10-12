@@ -1,0 +1,37 @@
+.table-style-grid {
+  display: grid;
+  gap: var(--admin-section-gap);
+}
+
+.table-style-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.table-style-header h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.table-style--striped .ant-table-tbody > tr:nth-child(odd) > td {
+  background: var(--aicp-color-bg-subtle);
+}
+
+.table-style--card .ant-table {
+  border-radius: 8px;
+}
+
+.table-style--tech .ant-table-thead > tr > th {
+  background: color-mix(in srgb, var(--aicp-color-action-primary) 12%, transparent);
+}
+
+.table-style--business .ant-table-thead > tr > th {
+  font-weight: 600;
+}
+
+.table-style--modern .ant-table-tbody > tr > td {
+  border-bottom-color: var(--aicp-color-border-subtle);
+}

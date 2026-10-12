@@ -1,0 +1,15 @@
+.generated-chart-panel__title {
+  padding: 14px 16px 0;
+  color: var(--aicp-color-text-primary);
+  font-size: 14px;
+  font-weight: 620;
+}
+
+.generated-upload-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: var(--aicp-color-text-secondary);
+  font-size: 12px;
+}
